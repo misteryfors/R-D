@@ -1,0 +1,144 @@
+.ProductsSlot{
+
+    top: 200px;
+    width: 100%;
+
+}
+.ProductsSlot .product-wrapper{
+    display: block;
+
+
+    float: left;
+    transition: .2s;
+}
+@media  only screen and (min-width: 450px) {
+    .ProductsSlot .product-wrapper{
+        width: 50%;
+    }
+    .ProductsSlot .product{
+        height: 450px;
+    }
+    .ProductsSlot .product .short {
+        height: 3.0em;
+    }
+}
+@media  only screen and (min-width: 768px) {
+    .ProductsSlot .product-wrapper{
+        width: 50%;
+    }
+    .ProductsSlot .product{
+        height: 450px;
+    }
+    .ProductsSlot .product .short {
+        height: 3.6em;
+    }
+}
+@media  only screen and (min-width: 900px) {
+    .ProductsSlot .product-wrapper{
+        width: 33.33%;
+    }
+    .ProductsSlot .product{
+        height: 450px;
+    }
+    .ProductsSlot .product .short {
+        height: 2.6em;
+    }
+}
+@media  only screen and (min-width: 1100px) {
+    .ProductsSlot .product-wrapper{
+        width: 33.33%;
+    }
+    .ProductsSlot .product{
+        height: 450px;
+    }
+    .ProductsSlot .product .short {
+        height: 4.6em;
+    }
+}
+@media  only screen and (min-width: 1400px) {
+    .ProductsSlot .product-wrapper{
+        width: 25%;
+    }
+    .ProductsSlot .product{
+        height: 450px;
+    }
+    .ProductsSlot .product .short {
+        height: 3.8em;
+    }
+}
+.ProductsSlot .product{
+    display: block;
+    border: 1px solid #000000;
+    border-radius: 30px;
+    position: relative;
+    background: #ffffff;
+    margin: 0 20px 20px 0;
+    text-decoration: none;
+    color: #000000;
+    z-index: 0;
+
+
+}
+.ProductsSlot .product .imageBox{
+    position: relative;
+    padding-bottom: 80%;
+    overflow: hidden;
+
+}
+.ProductsSlot .product img{
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 70%;
+    height: 90%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    transition: transform .4s ease-out;
+}
+.ProductsSlot .product .short{
+    position: relative;
+    margin: 5px;
+    text-align: center;
+    font-size: 1em;
+    line-height: 1.4em;
+    overflow: hidden;
+    color: #000000;
+}
+.ProductsSlot .product .short:after{
+   content: '';
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 8em;
+    height: 1.9em;
+    background: linear-gradient(to left top, #fff, rgba(255,255,255,0));
+}
+.ProductsSlot .product .name{
+    position: relative;
+    margin: 10px;
+    text-align: center;
+    font-size: 1.5em;
+    line-height: 1.4em;
+    overflow: hidden;
+    color: #000000;
+
+}
+.ProductsSlot .product .price{
+    margin: 10px;
+    text-align: center;
+    font-size: 2em;
+    line-height: 1.4em;
+    overflow: hidden;
+    background: #adf5af;
+    border: 1px solid #000000;
+    border-radius: 30px;
+    color: black;
+
+}
+.ProductsSlot .productBlock{
+    position: relative;
+}

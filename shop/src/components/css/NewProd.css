@@ -1,0 +1,121 @@
+.disk {
+    margin-top: 20px;
+}
+.disk__btns {
+    display: flex;
+}
+.disk__create {
+    margin-left: 10px;
+}
+.disk__upload-input {
+    display: none;
+}
+.disk__upload-label {
+    border: 2px dashed #566885;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.drop-area {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    border: dashed #566885 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+}
+.popup {
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup__content {
+    width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+}
+.popup__create {
+    align-self: flex-end;
+}
+.popup__header {
+    display: flex;
+    justify-content: space-between;
+}
+.popup input {
+    margin: 20px 0px;
+}
+.ProductForm{
+    width: 100%;
+
+    display: flex;
+}
+.ProductForm .leftBlock{
+    position: relative;
+    width: 50%;
+    height: 100%;
+}
+.ProductForm .rightBlock{
+    position: relative;
+    width: 50%;
+    height: 100%;
+}
+.ProductForm .Name{
+    width: 80%;
+}
+.ProductForm .Type{
+    width: 80%;
+}
+.ProductForm .Mark{
+    width: 80%;
+}
+.ProductForm .shortDescription{
+    width: 80%;
+    height: 150px;
+}
+.ProductForm .fullDescription{
+    width: 80%;
+    height: 250px;
+}
+.ProductForm .price{
+    width: 80%;
+}
+.ProductForm .input{
+    display: block;
+    margin: 10px;
+    width: 80%;
+    height: 60%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.ProductForm .btnSave{
+    position: absolute;
+    left: 20%;
+    height: 50px;
+    width: 250px;
+}
+.ProductForm label{
+    width: 80%;
+    font-weight: 600;
+}
