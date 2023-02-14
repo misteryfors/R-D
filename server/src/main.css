@@ -1,0 +1,9 @@
+main{
+    z-index: -1;
+    position: absolute;
+    top: 100px;
+    display: block;
+    width: 100%;
+    background-color: #ffffff;
+    left: 0px;
+}
