@@ -63,7 +63,7 @@ router.post('/redactProduct',
             console.log(e)
         }
     })
-const ItemsPerPage=5
+const ItemsPerPage=12
 router.post('/getProducts',
     async (req, res) => {
         const page=req.body.currentPage || 1
