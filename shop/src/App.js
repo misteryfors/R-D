@@ -1,18 +1,13 @@
-import './App.css';
-import React from "react";
-import './main.css';
-import './Content.css';
-import Routs from "./Routs";
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
-class App extends React.Component {
-  render() {
-    return (
-        <div>
-          <Routs/>
-        </div>
-    );
-  }
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+function App() {
+  return (
+    <main>
+        aaaaaaaaa
+      <Header/>
+      <Footer/>
+    </main>
+  );
 }
 
 export default App;
