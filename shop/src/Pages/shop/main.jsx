@@ -16,6 +16,7 @@ import filters from "./filters/filters";
 
 
 
+
 const prod = {
     products:[
         {id:'1',type:'1samsung',img:'tovar.jpg',title:'Samsung',price:90000,shortDescription:'ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ZZZ XXX CCC VVV BBB ',link:''},
@@ -29,8 +30,9 @@ const prod = {
 }
 const MainPage = () => {
     const dispatch = useDispatch()
-    const [products,setposts] = useState([]);
-    const currentPage= useSelector(state =>state.shop.page)
+    const [products,setProducts] = useState([]);
+    const [currentPage,setCurrenPage] = useState(0);
+    const [countPage,setCountPage] = useState(1);
     const pageCount= useSelector(state =>state.shop.pageCount)
     const [all, setAll] = useState("")
     const [name, setName] = useState("")
@@ -40,41 +42,43 @@ const MainPage = () => {
     const [maxPrice, setMaxPrice] = useState(999999999999)
     const user=useSelector(state =>state.user.currentUser.id)
     const role=useSelector(state =>state.user.currentUser.role)
-    let pages=[]
-    console.log(user)
-    function createPages(pages, pagesCount, currentPage) {
-        if(pagesCount > 10) {
-            if(currentPage > 5) {
-                for (let i = currentPage-4; i <= currentPage+5; i++) {
-                    pages.push(i)
-                    if(i == pagesCount) break
-                }
-            }
-            else {
-                for (let i = 1; i <= 10; i++) {
-                    pages.push(i)
-                    if(i == pagesCount) break
-                }
-            }
-        }  else {
-            for (let i = 1; i <= pagesCount; i++) {
-                pages.push(i)
+    const [fetching, setFetching] = useState(false)
+
+    useEffect(()=> {
+
+        if (currentPage + 1 <= countPage)
+        {
+            if (fetching) {
+                dispatch(getProducts(currentPage, setCurrenPage, setFetching, products, setProducts, setCountPage, pageCount, {
+                    all,
+                    name,
+                    type,
+                    mark,
+                    minPrice,
+                    maxPrice
+                }))
+                setCountPage(2)
             }
         }
-    }
-    createPages(pages,pageCount,currentPage)
+
+    },[fetching])
     useEffect(()=>{
-        fetch('')
-    })
-    useEffect(() => {
-        dispatch(getProducts(currentPage,{all,name,type,mark,minPrice,maxPrice}))
         dispatch(getChats(user))
-    }, [currentPage])
+        document.addEventListener('scroll',scrollHandler)
+        return function (){
+            document.removeEventListener('scroll',scrollHandler)
+        }
+    },[])
+    const scrollHandler = (e) =>  {
+        if(e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop +window.innerHeight)<100 && currentPage+1<=countPage ){
+                setFetching(true)
+        }
+    }
+
+
     function filtr(){
-        dispatch(getProducts(currentPage,{all,name,type,mark,minPrice,maxPrice}))
-        pages=[]
-        createPages(pages,pageCount,currentPage)
-        console.log(pages,pageCount,currentPage)
+        dispatch(getProducts(0,setCurrenPage,setFetching,products,setProducts,setCountPage,pageCount,{all,name,type,mark,minPrice,maxPrice}))
+        console.log(pageCount,currentPage)
     }
 
     return(
@@ -105,19 +109,16 @@ const MainPage = () => {
                             maxPrice={maxPrice} setMaxPrice={setMaxPrice}/>
 
 
-                        <div style={{width: '80%',height: '100%'}}>
+                        <div style={{width: '80%',height: '100%',display:'block'}}>
                             <div className="ProductsSlot">
-                                    <ProductsList/>
+                                    <ProductsList prod={products} fetching={fetching} currentPage={currentPage} countPage={countPage}/>
+
                             </div>
+
+
                         </div>
 
                     </div>
-            <div className={'pagination'} style={{width: '100%'}}>
-                {pages.map((page,index)=><span
-                    key={index}
-                    className={currentPage==page ? 'current-page':'page'}
-                    onClick={()=>dispatch(setPage(page))}>{page}</span>) }
-            </div>
         </div>
     )
 }

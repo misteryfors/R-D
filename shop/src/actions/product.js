@@ -107,19 +107,24 @@ export function uploadFile(file, UID,DIR) {
         }
     }
 }
-export function getProducts(currentPage,filters) {
+export function getProducts(currentPage,setCurrenPage,setFetching,products,setProducts,setCountPage,pageCount, filters) {
     return async dispatch => {
         try {
                 const response = await axios.post(`http://178.141.253.120:3001/api/prod/getProducts`,
-                    {currentPage,filters}
-                )
+                    {currentPage:currentPage+1,filters}
+                ).finally(()=>setFetching(false))
+
             console.log(response.data)
-            dispatch(setProducts(response.data.products))
-            dispatch(setPageCount(response.data.pagination.pageCount))
-            console.log(true)
+            setProducts([...products,...response.data.products])
+            setCountPage(pageCount=>response.data.pagination.pageCount)
+            setCurrenPage(currentPage=>currentPage+1)
+            console.log(products)
+            //dispatch(setProducts(response.data.products))
+            //dispatch(setPageCount(response.data.pagination.pageCount))
+
             setLOAD(true)
         } catch (e) {
-            alert(e)
+            //alert(e)
         }
     }
 }

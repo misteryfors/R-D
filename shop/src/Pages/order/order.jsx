@@ -164,7 +164,7 @@ const Order = () => {
                                     id={'dateTimeInput'}
                                     type="datetime-local"
                                     className="input"
-                                    value={time}
+                                    value={time.toString()}
                                     onChange={(e) => setTime(e.target.value)}
                                     required
                                 />
@@ -191,7 +191,7 @@ const Order = () => {
                             </div>
 
                             <button className={"btnSave"}
-                                    onClick={() => redactOrder(id,adress, fio, phone, type, mark, timeInUse, comment, urgency, time, imgs)}>Сохранить
+                                    onClick={() => redactOrder(id,adress, fio, phone, type, mark, timeInUse, comment, urgency, new Date(time).toISOString(), imgs)}>Сохранить
                             </button>
 
                         </div>

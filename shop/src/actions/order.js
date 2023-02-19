@@ -46,7 +46,7 @@ export const getOrder = (orderId,setMainImg, setAdress, setFio, setPhone, setTyp
                     setMark(response.data.order.mark)
                     setTimeInUse(response.data.order.timeInUse)
                     setComment(response.data.order.comment)
-                    setTime(response.data.order.time)
+                    setTime(response.data.order.time.replace("Z", ""))
                     setImgs(response.data.order.imgs)
                     setUrgency(response.data.order.urgency)
 

@@ -16,6 +16,7 @@ import {CPProducts} from "./Pages/UserPage/admin/Products/CPProducts";
 import ProductPage from "./Pages/shop/products/productPage";
 import {NewOrder} from "./Pages/order/newOrder";
 import {Order} from "./Pages/order/order";
+import {Slider} from "./Pages/slider";
 
 export default function Routs(){
     const isAuth =useSelector(state =>state.user.isAuth)
@@ -29,6 +30,7 @@ export default function Routs(){
     return(
         <Routes>
             <Route path="/" element={<Layout/>}>
+                <Route path="fer" element={<Slider/>}/>
                 <Route index element={<InfoPage/>}/>
                 <Route path="info" element={<InfoPage/>}/>
                 <Route path="shop" element={<MainPage/>}/>

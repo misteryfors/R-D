@@ -10,7 +10,7 @@ import plug from "../../../components/image/Заглушка.png"
 import {setLOAD} from "../../../reducers/productReducer";
 
 const ProductPage=()=>{
-    const [mainImg, setMainImg] = useState([])
+    const [mainImg, setMainImg] = useState(null)
     const loads=useSelector(state =>state.product.load)
     const dispatch = useDispatch()
     let { id } = useParams();
