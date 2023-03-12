@@ -1,7 +1,6 @@
 import React, { useState, useEffect} from "react";
 import {NavLink, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {createProduct, getProduct, redactProduct} from "../../actions/product";
 import {uploadFile} from "../../actions/product";
 import "../../components/css/NewProd.css";
 import '../../components/css/imgList.css'
@@ -40,7 +39,7 @@ const NewOrder = () => {
     };
     function fileUploadHandler(event) {
         const files = [...event.target.files]
-        files.forEach(file => {dispatch(uploadFile(file, user,'orders'));setImgs([...imgs, file.name]);})
+        files.forEach(file => {uploadFile(file, user,'orders');setImgs([...imgs, file.name]);})
         console.log(imgs)
         //setImgs(files[0].name)
     }
@@ -59,7 +58,7 @@ const NewOrder = () => {
         event.preventDefault()
         event.stopPropagation()
         let files = [...event.dataTransfer.files]
-        files.forEach(file => {dispatch(uploadFile(file, user,'orders'));console.log(file.name);setImgs([...imgs, file.name]);})
+        files.forEach(file => {uploadFile(file, user,'orders');console.log(file.name);setImgs([...imgs, file.name]);})
         setDragEnter(false)
     }
     useEffect(() => {
@@ -152,7 +151,7 @@ const NewOrder = () => {
                                 <input
                                     type="datetime-local"
                                     className="input"
-                                    value={'2017-06-01T08:30'}
+                                    value={time}
                                     onChange={(e) => setTime(e.target.value)}
                                     required
                                 />
@@ -180,7 +179,7 @@ const NewOrder = () => {
                             <div className="fullDescription">
                                 <NavLink to={'/User/chats'}>
                                 <button className={"btnSave"}
-                                        onClick={() => role=='client' ? dispatch(createOrder(chat[0]._id, user, adress, fio, phone, type, mark, timeInUse, comment, urgency, time, imgs))  : alert('Вам эта функция недоступна вы администратор')}>Сохранить
+                                        onClick={() => dispatch(createOrder(chat[0]._id, user, adress, fio, phone, type, mark, timeInUse, comment, urgency, time, imgs, role))}>Сохранить
                                 </button>
                                 </NavLink>
                             </div>

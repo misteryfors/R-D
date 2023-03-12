@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 
 
 
-const Modal = ({active,setActive,name,setName,setProducts,products})=>{
+const Modal = ({active,setActive,name,setName})=>{
     const dispatch = useDispatch()
     return(
         <div className={active ? 'Modal active': 'Modal'} onClick={()=>setActive(false)}>
@@ -17,7 +17,7 @@ const Modal = ({active,setActive,name,setName,setProducts,products})=>{
                 onChange={(e) => setName(e.target.value)}
                 required
             />
-                <div  onClick={() => createProduct(name,'','',[],0,'','',false,setProducts,products)}><button className={"MainButton"} >Добавить</button></div>
+                <div  onClick={() => createProduct(name,'','',[],0,'','',false)}><button className={"MainButton"} >Добавить</button></div>
             </div>
         </div>
     )

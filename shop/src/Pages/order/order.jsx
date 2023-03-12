@@ -1,11 +1,9 @@
 import React, { useState, useEffect} from "react";
 import {NavLink, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {createProduct, getProduct, redactProduct} from "../../actions/product";
 import {uploadFile} from "../../actions/product";
 import "../../components/css/NewProd.css";
 import '../../components/css/imgList.css'
-import {setLOAD} from "../../../src/reducers/productReducer";
 import {createOrder, getOrder, redactOrder} from "../../actions/order";
 import {getChats} from "../../actions/message";
 
@@ -40,7 +38,7 @@ const Order = () => {
     };
     function fileUploadHandler(event) {
         const files = [...event.target.files]
-        files.forEach(file => {dispatch(uploadFile(file, user,'orders'));setImgs([...imgs, file.name]);})
+        files.forEach(file => {uploadFile(file, user,'orders');setImgs([...imgs, file.name]);})
         console.log(imgs)
         //setImgs(files[0].name)
     }
@@ -59,7 +57,7 @@ const Order = () => {
         event.preventDefault()
         event.stopPropagation()
         let files = [...event.dataTransfer.files]
-        files.forEach(file => {dispatch(uploadFile(file, user,'orders'));console.log(file.name);setImgs([...imgs, file.name]);})
+        files.forEach(file => {uploadFile(file, user,'orders');console.log(file.name);setImgs([...imgs, file.name]);})
         setDragEnter(false)
     }
     useEffect(() => {

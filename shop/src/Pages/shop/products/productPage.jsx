@@ -1,42 +1,41 @@
 import React, {Component, useEffect, useState} from 'react'
-import {NavLink} from "react-router-dom";
 import { useParams } from 'react-router-dom';
-import {getProduct, getProducts, redactProduct} from "../../../actions/product";
+import {getProduct} from "../../../actions/product";
 import {useDispatch, useSelector} from "react-redux";
 import "../../../components/css/NewProd.css"
 import '../../../components/css/imgList.css'
 import '../../../components/css/loading.css'
 import plug from "../../../components/image/Заглушка.png"
-import {setLOAD} from "../../../reducers/productReducer";
 
 const ProductPage=()=>{
-    const [mainImg, setMainImg] = useState(null)
-    const loads=useSelector(state =>state.product.load)
+    const [mainImg, setMainImg] = useState("")
     const dispatch = useDispatch()
     let { id } = useParams();
-    const product = useSelector(state =>state.product)
+    const [product, setProduct] = useState(null)
+    const [fetching, setFetching] = useState(true)
+    const user=useSelector(state =>state.user.currentUser.id)
     useEffect(() => {
 
-        dispatch(getProduct(id))
+        getProduct(id,setProduct,setFetching)
         console.log(product)
 
     }, [])
     // получаем параметры строки запроса
     return(
         <div>
-            {loads===true ?
+            {fetching===false ?
                 <div>
         <form className={"ProductForm"} >
 
             <div className={"leftBlock"}>
                 <div className="imgSlot" style={{display:"block"}}>
                             <div className="mainImg">
-                                <img  src={"http://178.141.253.120:3001/products/"+id+"/"+(mainImg!="" ? mainImg:product.imgs[0])}/>
+                                <img  src={"https://master43.ru:8443/products/"+id+"/"+(mainImg!="" ? mainImg:product.imgs[0])}/>
                             </div>
                     <div className={"imgList"}>
                         {product.imgs.map(el =>(
                             <div className={"additionalImg"}>
-                                <img onMouseEnter={()=>setMainImg(el)} src={"http://178.141.253.120:3001/products/"+id+"/"+el ? "http://178.141.253.120:3001/products/"+id+"/"+el :plug}/>
+                                <img onMouseEnter={()=>setMainImg(el)} src={"https://master43.ru:8443/products/"+id+"/"+el ? "https://master43.ru:8443/products/"+id+"/"+el :plug}/>
                             </div>
                         ))}
                     </div>

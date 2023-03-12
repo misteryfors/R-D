@@ -1,6 +1,6 @@
 import React from 'react'
 import {NavLink} from "react-router-dom";
-import plug from '../../../components/image/Заглушка.png'
+
 
 
 
@@ -8,9 +8,7 @@ const Products=({product})=>{
     let img;
     if (product.imgs.length!=0)
     {
-        img=<img src={"http://178.141.253.120:3001/products/"+product._id+"/"+product.imgs[0]}/>
-    }else {
-        img=<img src={plug}/>
+        img=<img src={"https://master43.ru:8443/products/"+product._id+"/"+product.imgs[0]}/>
     }
         return(
             <div className="ProductsSlot">

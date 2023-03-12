@@ -6,13 +6,13 @@ import plug from "../../../../components/image/Заглушка.png";
 import {deleteProduct} from "../../../../actions/product";
 
 
-const Products=({product,setProducts,products})=>{
+const Products=({product})=>{
     let img;
     if (product)
     {img=<img src={plug}/>
     if (product.imgs.length!=0)
     {
-        img=<img src={"https://master43.ru:8443/products/"+product._id+"/"+product.imgs[0]}/>
+        img=<img src={"https://master43.ru:8443/orders/"+product._id+"/"+product.imgs[0]}/>
     }else {
 
     }
@@ -32,11 +32,10 @@ const Products=({product,setProducts,products})=>{
                                         <div className="imageBox">
                                             {img}
                                         </div>
-                                        <div className={'name'}>Имя: {product.name ? product.name : 'БезИмени'}</div>
-                                        <div className={'price'}>Цена: {product.price ? product.price: 0}₽</div>
-                                        <div className={'short'}>Описание: {product.shortDescription}</div>
-                                        <button className={'btn-delete'} onClick={() => deleteProduct(product._id,setProducts,products)}>Удалить</button>
-                                        <NavLink to={"../../redact/item/"+product._id} >
+                                        <div className={'name'}>Адресс: {product.adress ? product.adress : 'БезАдресса'}</div>
+                                        <div className={'price'}>ФИО: {product.fio ? product.fio: 'БезФИО'}₽</div>
+                                        <div className={'short'}>Телефон: {product.phone ? product.phone: 'без телефона'}</div>
+                                        <NavLink to={'/Order/'+product._id}>
                                             <button className={'btn-redact'} >Изменить</button>
                                         </NavLink>
                                         </div>

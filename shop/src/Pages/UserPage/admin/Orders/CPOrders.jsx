@@ -3,11 +3,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {getProducts} from "../../../../actions/product";
 import Products from "./Products";
 import Modal from "./modal";
+import {getOrders} from "../../../../actions/order";
 
 
 
 
-export default function CPProducts(){
+export default function CPOrders(){
     const dispatch = useDispatch()
     const [name, setName] = useState("")
     const [modalActive, setModalActive] = useState("")
@@ -15,28 +16,7 @@ export default function CPProducts(){
     const [currentPage,setCurrenPage] = useState(0);
     const [countPage,setCountPage] = useState(1);
     const [fetching, setFetching] = useState(false)
-    const productsList = products?.map(product => <Products key={product._id} product={product} setProducts={setProducts} products={products}/>)
-    let pages=[]
-    function createPages(pages, pagesCount, currentPage) {
-        if(pagesCount > 10) {
-            if(currentPage > 5) {
-                for (let i = currentPage-4; i <= currentPage+5; i++) {
-                    pages.push(i)
-                    if(i == pagesCount) break
-                }
-            }
-            else {
-                for (let i = 1; i <= 10; i++) {
-                    pages.push(i)
-                    if(i == pagesCount) break
-                }
-            }
-        }  else {
-            for (let i = 1; i <= pagesCount; i++) {
-                pages.push(i)
-            }
-        }
-    }
+    const productsList = products.reverse()?.map(product => <Products key={product._id} product={product}/>)
 
     useEffect(()=> {
         console.log(fetching)
@@ -46,8 +26,7 @@ export default function CPProducts(){
         {
             if (fetching) {
 
-                getProducts(currentPage, setCurrenPage, setFetching, products, setProducts, setCountPage, countPage,true,
-                    {all:'',name:'',type:'',mark:'',minPrice:0,maxPrice:100000})
+                getOrders(currentPage, setCurrenPage, setFetching, products, setProducts, setCountPage, countPage,true)
 
             }
         }
@@ -76,8 +55,8 @@ export default function CPProducts(){
                     {productsList}
                     {fetching===true && currentPage + 1 <= countPage ?<div style={{width:'100%',height:'200px'}} className="product-wrapper"><div className={"loading1"}/></div>:<div/> }
                 </div>
-            <Modal active={modalActive} setActive={setModalActive} name={name} setName={setName} setProducts={setProducts} products={products}/>
+            <Modal active={modalActive} setActive={setModalActive} name={name} setName={setName}/>
         </div>
     )
 }
-export {CPProducts};
+export {CPOrders};

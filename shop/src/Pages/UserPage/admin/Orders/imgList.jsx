@@ -13,11 +13,11 @@ const imgList=({imgList,id,list})=>{
     //setMainImg(imgList[0])
     return(
         <div className="imgSlot" style={{display:"block"}}>
-            <img className="mainImg" src={"http://localhost:3001/"+list+"/"+id+"/"+mainImg}/>
+            <img className="mainImg" src={"https://master43.ru:8443/"+list+"/"+id+"/"+mainImg}/>
             <div style={{display:"flex"}}>
             {imgList.map(el =>(
                 <div className={"additionalImg"}>
-                    <img onClick={gh(el)} src={"http://localhost:3001/"+list+"/"+id+"/"+el}/>
+                    <img onClick={gh("http://localhost:3001/"+list+"/"+id+"/"+el)} src={"http://localhost:3001/"+list+"/"+id+"/"+el}/>
                 </div>
             ))}
             </div>

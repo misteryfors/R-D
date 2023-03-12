@@ -15,6 +15,7 @@ const AdminPage = () => {
                 <NavLink to="profile"><button className={"MainButton"}>Профиль</button></NavLink>
                 <NavLink to="chats"><button className={"MainButton"}>Чаты</button></NavLink>
                 <NavLink to="products"><button className={"MainButton"}>Продукты</button></NavLink>
+                <NavLink to="orders"><button className={"MainButton"}>Заказы</button></NavLink>
                 <NavLink to="/"><div className={"MainButton"} onClick={() => dispatch(logout()) }>Выход</div></NavLink>
             </div>
             <div style={{width: "65%"}}>

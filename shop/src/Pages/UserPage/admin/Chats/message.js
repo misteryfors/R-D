@@ -1,9 +1,7 @@
 import React, {Component} from 'react'
 import {NavLink} from "react-router-dom";
-import {useDispatch} from "react-redux";
 import '../../../../components/css/Chat.css'
-import plug from "../../../../components/image/Заглушка.png";
-import {createProduct, deleteProduct} from "../../../../actions/product";
+
 
 
 const Message=({message,pos,user})=>{

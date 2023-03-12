@@ -1,18 +1,15 @@
 import '../../main.css';
-import Products from "./products/Products";
 import {createChat, getChats, sendMessage} from "../../actions/message";
 import {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {getProducts, redactProduct} from "../../actions/product";
+import {getProducts} from "../../actions/product";
 import ProductsList from "./products/ProductsList";
 import '../../components/css/search.css'
 import '../../components/css/Filter.css'
 import '../../components/css/Pagination.css'
-import {setPage} from "../../reducers/shopReducer";
 import Filters from "./filters/filters";
-import MultiRangeSlider from "./filters/multiRangeSlider/MultiRangeSlider";
-import {NavLink, useParams} from "react-router-dom";
-import filters from "./filters/filters";
+import {NavLink, useParams, useLocation} from "react-router-dom";
+import {Helmet} from "react-helmet";
 
 
 
@@ -30,34 +27,47 @@ const prod = {
 }
 const MainPage = () => {
     const dispatch = useDispatch()
+    const search = useLocation().search;
+    let params = (new URL(document.location)).searchParams;
+    let currentPage1 = params.get('currentPage');
+    let all1 = params.get('all');
+    let name1 = params.get('name');
+    let type1 = params.get('type');
+    let mark1 = params.get('mark');
+    let minPrice1 = params.get('minPrice');
+    let maxPrice1 = params.get('maxPrice');
     const [products,setProducts] = useState([]);
-    const [currentPage,setCurrenPage] = useState(0);
+    const [currentPage,setCurrenPage] = useState(currentPage1 ? currentPage1 : 0);
     const [countPage,setCountPage] = useState(1);
-    const pageCount= useSelector(state =>state.shop.pageCount)
-    const [all, setAll] = useState("")
-    const [name, setName] = useState("")
-    const [type, setType] = useState("")
-    const [mark, setMark] = useState("")
-    const [minPrice, setMinPrice] = useState(0)
-    const [maxPrice, setMaxPrice] = useState(999999999999)
+    const [all, setAll] = useState(all1?all1:"")
+    const [name, setName] = useState(name1?name1:"")
+    const [type, setType] = useState(type1?type1:"")
+    const [mark, setMark] = useState(mark1?mark1:"")
+    const [minPrice, setMinPrice] = useState(minPrice1 ? minPrice1 : 0)
+    const [maxPrice, setMaxPrice] = useState(maxPrice1 ? maxPrice1 : 100000)
     const user=useSelector(state =>state.user.currentUser.id)
     const role=useSelector(state =>state.user.currentUser.role)
     const [fetching, setFetching] = useState(false)
+    const navigate = useLocation();
 
+
+    useEffect(()=>{
+        setFetching(true)
+    },[])
     useEffect(()=> {
 
         if (currentPage + 1 <= countPage)
         {
             if (fetching) {
-                dispatch(getProducts(currentPage, setCurrenPage, setFetching, products, setProducts, setCountPage, pageCount, {
+                getProducts(currentPage, setCurrenPage, setFetching, products, setProducts, setCountPage, countPage,false, {
                     all,
                     name,
                     type,
                     mark,
                     minPrice,
                     maxPrice
-                }))
-                setCountPage(2)
+                })
+
             }
         }
 
@@ -77,21 +87,27 @@ const MainPage = () => {
 
 
     function filtr(){
-        dispatch(getProducts(0,setCurrenPage,setFetching,products,setProducts,setCountPage,pageCount,{all,name,type,mark,minPrice,maxPrice}))
-        console.log(pageCount,currentPage)
+        getProducts(0,setCurrenPage,setFetching,[],setProducts,setCountPage,0,false,{all,name,type,mark,minPrice,maxPrice})
+
     }
 
     return(
         <div className={"content"}>
-
+            <Helmet>
+                <title>Shop</title>
+                <link rel="canonical" href="https://master43.ru" />
+                <meta name="description" content="На нашем сайте мы предоставляем услуги
+                    по сервисному обслуживанию гарантийному и после гарантийный" />
+            </Helmet>
                     <div className="searchBlock" style={{width: '100%',height: '150px',display:"flex"}}>
                         <div className="searchBox">
                             <input className="search" style={{outline:'none'}} value={all} onChange={(e) => setAll(e.target.value)}/>
                         </div>
 
-                            <NavLink style={{width: '100px',height: '100px',margin:"20px"}} to={'/NewOrder'}>
-                            <div  >
-                                <img style={{width: '100px',height: '100px',objectFit:"cover"}} src={require("../../components/image/Order.jpg")}/>
+                            <NavLink style={{width: '15%',height: '200px',margin:"20px"}} to={'/NewOrder'}>
+                            <div  style={{display:'block'}}>
+                                <img style={{width: '75%',height: '75%',objectFit:"cover",margin:'20px'}} src={require("../../components/image/Order.jpg")}/>
+                                <img style={{width: '75%',height: '75%',objectFit:"cover",margin:'20px'}} src={require("../../components/image/strelka.png")}/>
                             </div>
                         </NavLink>
 

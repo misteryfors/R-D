@@ -20,8 +20,9 @@ const NewProduct = () => {
     const [imgs, setImgs] = useState([])
     const [shortDescription, setShortDescription] = useState("")
     const [fullDescription, setFullDescription] = useState("")
+
     const [dragEnter, setDragEnter] = useState(false)
-    const [privateComment, setPrivateComment] = useState("")
+
 
     function fileUploadHandler(event) {
         const files = [...event.target.files]
@@ -62,11 +63,6 @@ const NewProduct = () => {
     useEffect(() => {
         getProduct(id,setProduct,setFetching)
     }, [])
-    function delImg(el){
-        setImgs(imgs.filter(img => img!=el));
-        console.log(el)
-        console.log(imgs)
-    }
     useEffect(() => {
         if (product!=null)
         {
@@ -78,7 +74,6 @@ const NewProduct = () => {
         setImgs(product.imgs)
         setMark(product.mark)
         setType(product.type)
-        setPrivateComment(product.privateComment)
         }
     }, [product])
     return (
@@ -104,7 +99,7 @@ const NewProduct = () => {
                         <div className={"imgList"}>
                             {imgs.map(el => (
                                 <div className={"additionalImg"}>
-                                    <img onMouseEnter={() => setMainImg(el)} onClick={()=>delImg(el)}
+                                    <img onMouseEnter={() => setMainImg(el)}
                                          src={"https://master43.ru:8443/products/" + id + "/" + el}/>
 
                                 </div>
@@ -126,7 +121,6 @@ const NewProduct = () => {
                         <input
                             type="text"
                             className="input"
-                            aria-placeholder={'999999'}
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             required
@@ -184,18 +178,9 @@ const NewProduct = () => {
                             required
                         />
                     </div>
-                    <div className="fullDescription">
-                        <label>Приватный комментарий</label>
-                        <textarea
-                            type="text"
-                            className="input"
-                            value={privateComment}
-                            onChange={(e) => setPrivateComment(e.target.value)}
-                            required
-                        />
-                    </div>
+
                     <button className={"btnSave"}
-                            onClick={() => {redactProduct(id, name, type, mark, imgs, price, shortDescription, fullDescription, true,privateComment)}}>Сохранить
+                            onClick={() => {redactProduct(id, name, type, mark, imgs, price, shortDescription, fullDescription, true)}}>Сохранить
                     </button>
                 </div>
             }

@@ -17,6 +17,9 @@ import ProductPage from "./Pages/shop/products/productPage";
 import {NewOrder} from "./Pages/order/newOrder";
 import {Order} from "./Pages/order/order";
 import {Slider} from "./Pages/slider";
+import CPOrders from "./Pages/UserPage/admin/Orders/CPOrders";
+import {Helmet} from "react-helmet";
+import {MoreInfoPage} from "./Pages/moreInfo/moreInfo";
 
 export default function Routs(){
     const isAuth =useSelector(state =>state.user.isAuth)
@@ -32,18 +35,23 @@ export default function Routs(){
             <Route path="/" element={<Layout/>}>
                 <Route path="fer" element={<Slider/>}/>
                 <Route index element={<InfoPage/>}/>
-                <Route path="info" element={<InfoPage/>}/>
+                <Route path="info" element={<MoreInfoPage/>}/>
                 <Route path="shop" element={<MainPage/>}/>
+                <Route path="shop" element={<MainPage/>}>
+                    <Route index element={<MainPage/>}/>
+                    <Route path="*" element={<MainPage/>}/>
+
+                </Route>
                 <Route path="shop/item/:id" element={<ProductPage/>}/>
                 {!isAuth && <Route path="/User" element={<Navigate to="/login" />}/>}
                 {isAuth && <Route path="registration" element={<Navigate to="/User"/>}/>}
                 {isAuth && <Route path="login" element={<Navigate to="/User"/>}/>}
-
                 {role==="admin" ?
                     <Route path="/User" element={<AdminPage/>}>
                         <Route path="profile" element={<CPProfile/>}/>
                         <Route path="chats" element={<CPChats/>}/>
                         <Route path="products" element={<CPProducts/>}/>
+                        <Route path="orders" element={<CPOrders/>}/>
                     </Route>
                     :
                     <Route path="/User" element={<ClientPage/>}>

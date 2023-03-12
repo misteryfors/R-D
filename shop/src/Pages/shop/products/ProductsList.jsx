@@ -14,7 +14,7 @@ const ProductsList = (prod) => {
 
                 <div style={{width: '80%', height: '100%'}}>
                         {products}
-                    {prod.fetching===true && prod.currentPage + 1 <= prod.countPage ?<div style={{width:'100%',height:'200px'}} className="product-wrapper"><div className={"loading1"}/></div>:<aaa/> }
+                    {prod.fetching===true && prod.currentPage + 1 <= prod.countPage ?<div style={{width:'100%',height:'200px'}} className="product-wrapper"><div className={"loading1"}/></div>:<div/> }
 
                 </div>
 
