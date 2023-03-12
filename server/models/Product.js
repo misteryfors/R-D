@@ -9,7 +9,8 @@ const Product = new Schema({
     shortDescription:{type: String },
     description:{type: String },
     imgs:[{type: String }],
-    publicate:{type:Boolean }
+    publicate:{type:Boolean },
+    privateComment:{type:String}
 })
 
 module.exports = model('Product', Product)

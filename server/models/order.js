@@ -7,7 +7,7 @@ const Order = new Schema({
     phone:{type:String, required:true},
     type:{type: String, required:true},
     mark:{type: String, required:true},
-    timeInUse:{type: Number, required:true},
+    timeInUse:{type: String, required:true},
     comment:{type: String, required:true},
     urgency:{type: Boolean, required:true},
     time:{type: Date, required:true},

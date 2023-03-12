@@ -1,5 +1,5 @@
 {
-  "serverPort": 3001,
+  "serverPort": 442,
   "URL": "mongodb+srv://mistfors:yjdbrjd9271@cluster0.lemukar.mongodb.net/test",
   "secretKey": "mern-secket-key",
   "filePath": "F:\\Ssite\\server\\imgs",
