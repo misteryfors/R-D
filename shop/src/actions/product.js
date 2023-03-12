@@ -1,13 +1,10 @@
 import axios from 'axios'
-import {setAll, setLOAD, setProd, setUID} from "../reducers/productReducer";
-import {addProducts, delProducts, setPage, setPageCount, setProducts} from "../reducers/shopReducer";
 
 
 
-export const createProduct = (name, type, mark, imgs, price, shortDescription, description, publicate) => {
-    return async dispatch => {
+export async function createProduct (name, type, mark, imgs, price, shortDescription, description, publicate,setProducts,products) {
         try {
-            const response = await axios.post(`http://178.141.253.120:3001/api/prod/createProduct`, {
+            const response = await axios.post(`https://master43.ru:8443/api/prod/createProduct`, {
                 name,
                 type,
                 mark,
@@ -17,52 +14,47 @@ export const createProduct = (name, type, mark, imgs, price, shortDescription, d
                 description,
                 publicate
             })
-            dispatch(addProducts(response.data.product))
+            if (response.data.product)
+            {
+                console.log(response.data)
+                setProducts([response.data.product,...products])
+            }
             console.log(response.data)
         } catch (e) {
-            alert(e.response.data.message)
+            alert(e)
+            //alert(e.response.data.message)
         }
-    }
 }
-export const getProduct = (UID,setImgs) => {
-    return async dispatch => {
+export async function getProduct (UID,setProduct,setFetching) {
         try {
-            dispatch(setLOAD(false))
-            const response = await axios.post(`http://178.141.253.120:3001/api/prod/getProduct`, {
-                UID
-            })
-            if (response.data.product)
-            dispatch(setAll(response.data.product))
-            if (setImgs)
-            {
-                setImgs(response.data.product.imgs)
+            let user=localStorage.getItem('token')
+            const response = await axios.get(`https://master43.ru:8443/api/prod/getProduct?id=${UID}&user=${user}`)
+            if (response.status === 200) {
+                setProduct(response.data.product)
+                setFetching(false)
             }
             console.log(response.data.product)
             console.log(true)
-            setTimeout(dispatch(setLOAD(true)))
         } catch (e) {
             alert(e.response.data.message)
         }
-    }
 }
-export const deleteProduct = (UID) => {
-    return async dispatch => {
+export async function deleteProduct (UID,setProducts,products) {
         try {
             console.log('-------------------------------------')
             console.log(UID)
-            const response = await axios.post(`http://178.141.253.120:3001/api/prod/deleteProduct`, {
+            const response = await axios.post(`https://master43.ru:8443/api/prod/deleteProduct`, {
                 UID
             })
             console.log(response.data.product._id)
             if (response.data.product)
-                dispatch(delProducts(response.data.product._id))
+                setProducts(products.filter(product => product._id != response.data.product._id))
             console.log(response.data.product)
         } catch (e) {
             alert(e.response.data.message)
         }
-    }
 }
-export const redactProduct = async (UID, name, type, mark, imgs, price, shortDescription, description, publicate) => {
+export async function redactProduct (UID, name, type, mark, imgs, price, shortDescription, description, publicate,privateComment) {
     try {
         console.log(UID)
         console.log(name)
@@ -73,7 +65,7 @@ export const redactProduct = async (UID, name, type, mark, imgs, price, shortDes
         console.log(shortDescription)
         console.log(description)
         console.log(publicate)
-        const response = await axios.post(`http://178.141.253.120:3001/api/prod/redactProduct`, {
+        const response = await axios.post(`https://master43.ru:8443/api/prod/redactProduct`, {
             UID,
             name,
             type,
@@ -82,15 +74,15 @@ export const redactProduct = async (UID, name, type, mark, imgs, price, shortDes
             price,
             shortDescription,
             description,
-            publicate
+            publicate,
+            privateComment
         })
         alert(response.data.message)
     } catch (e) {
         alert(e.response.data.message)
     }
 }
-export function uploadFile(file, UID,DIR) {
-    return async dispatch => {
+export async function uploadFile (file, UID,DIR) {
         try {
             console.log(UID);
             console.log(DIR);
@@ -98,33 +90,34 @@ export function uploadFile(file, UID,DIR) {
             formData.append('file', file)
             formData.append('UID', UID)
             formData.append('DIR', DIR)
-            const response = await axios.post(`http://178.141.253.120:3001/api/prod/upload`, formData, {
+            const response = await axios.post(`https://master43.ru:8443/api/prod/upload`, formData, {
                 headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
             });
             //dispatch(addFile(response.data))
         } catch (e) {
             alert(e.response.data.message)
         }
-    }
 }
-export function getProducts(currentPage,setCurrenPage,setFetching,products,setProducts,setCountPage,pageCount, filters) {
-    return async dispatch => {
+export async function getProducts(currentPage,setCurrenPage,setFetching,products,setProducts,setCountPage,pageCount,revers, filters) {
         try {
-                const response = await axios.post(`http://178.141.253.120:3001/api/prod/getProducts`,
-                    {currentPage:currentPage+1,filters}
-                ).finally(()=>setFetching(false))
+            let user=localStorage.getItem('token')
+            let url=`https://master43.ru:8443/api/prod/getProducts?currentPage=${currentPage+1}&all=${filters.all}&name=${filters.name}&type=${filters.type}&mark=${filters.mark}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&revers=${revers}&user=${user}`
 
+            const response = await axios.get(url).finally(()=>setFetching(false))
             console.log(response.data)
+            console.log(response.data.products)
+            if (revers===true)
+                response.data.products.reverse()
+            console.log(products)
             setProducts([...products,...response.data.products])
             setCountPage(pageCount=>response.data.pagination.pageCount)
-            setCurrenPage(currentPage=>currentPage+1)
-            console.log(products)
+            setCurrenPage(currentPage=>Number(currentPage+1))
+            console.log([...products,...response.data.products])
+            return url
             //dispatch(setProducts(response.data.products))
             //dispatch(setPageCount(response.data.pagination.pageCount))
 
-            setLOAD(true)
         } catch (e) {
             //alert(e)
         }
-    }
 }

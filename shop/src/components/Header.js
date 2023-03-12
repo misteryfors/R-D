@@ -1,7 +1,9 @@
 import React from 'react'
 import './css/Header.css'
 import {NavLink} from "react-router-dom";
+import {useSelector} from "react-redux";
 export default function Header(){
+    const user=useSelector(state =>state.user.currentUser)
     return(
         <header>
             <NavLink to="/">
@@ -22,7 +24,7 @@ export default function Header(){
             <NavLink to="/User">
                 <div id='account'>
                     <img src={require('./image/Profile.PNG')}/>
-                    Имя пользователя
+                    {user.email?(user.name?user.name:user.email):"Мой аккаунт"}
                 </div>
             </NavLink>
         </header>

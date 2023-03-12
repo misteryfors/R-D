@@ -5,7 +5,7 @@ export const registration = (email, password) => {
     return async dispatch => {
         console.log(email, password)
         try {
-            const response = await axios.post(`http://178.141.253.120:3001/api/auth/registration`, {
+            const response = await axios.post(`https://master43.ru:8443/api/auth/registration`, {
                 email,
                 password
             })
@@ -21,7 +21,7 @@ export const registration = (email, password) => {
 export const login =  (email, password) => {
     return async dispatch => {
         try {
-            const response = await axios.post(`http://178.141.253.120:3001/api/auth/login`, {
+            const response = await axios.post(`https://master43.ru:8443/api/auth/login`, {
                 email,
                 password
             })
@@ -39,7 +39,7 @@ export const login =  (email, password) => {
 export const auth =  () => {
     return async dispatch => {
         try {
-            const response = await axios.get(`http://178.141.253.120:3001/api/auth/auth`,
+            const response = await axios.get(`https://master43.ru:8443/api/auth/auth`,
                 {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}}
             )
             dispatch(setUser(response.data.user))
@@ -54,7 +54,7 @@ export const auth =  () => {
 export const ChangAccountInformation =  (email, password,phone) => {
     return async dispatch => {
         try {
-            const response = await axios.post(`http://178.141.253.120:3001/api/auth/changeacc`, {
+            const response = await axios.post(`https://master43.ru:8443/api/auth/changeacc`, {
                 Firsttoken:`${localStorage.getItem('token')}`,
                 email,
                 password,

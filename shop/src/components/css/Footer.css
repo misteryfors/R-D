@@ -16,16 +16,39 @@ footer img{
 }
 footer .linkbox{
     display: flex;
-
-
 }
 footer .linkbox div{
-    width: 200px;
-
+    width: 12.5%;
 }
 footer .linkbox div a{
     line-height: 100px;
     text-align: center;
     color: #f3f3f3;
 
+}
+@media (max-width: 750px) {
+    footer .linkbox div a{
+        font-size: 10px;
+        line-height: 50px;
+    }
+    footer img{
+        width: 50px;
+        height: 50px;
+    }
+    footer{
+        height: 50px;
+    }
+}
+@media (max-width: 350px) {
+    footer .linkbox div a{
+        font-size: 8px;
+        line-height: 40px;
+    }
+    footer img{
+        width: 40px;
+        height: 40px;
+    }
+    footer{
+        height: 40px;
+    }
 }

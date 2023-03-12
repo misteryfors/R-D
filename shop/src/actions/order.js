@@ -1,15 +1,13 @@
 import axios from 'axios'
-import {setAll, setLOAD, setProd, setUID} from "../reducers/productReducer";
-import {addProducts, delProducts, setPage, setPageCount, setProducts} from "../reducers/shopReducer";
 import {sendMessage} from "./message";
 
 
 
-export const createOrder = (chat,user,adress, fio, phone, type, mark, timeInUse, comment, urgency, time, imgs) => {
+export const createOrder = (chat,user,adress, fio, phone, type, mark, timeInUse, comment, urgency, time, imgs, role) => {
     return async dispatch => {
         try {
             console.log(time)
-            const response = await axios.post(`http://178.141.253.120:3001/api/order/createOrder`, {
+            const response = await axios.post(`https://master43.ru:8443/api/order/createOrder`, {
                 adress,
                 fio,
                 phone,
@@ -23,6 +21,7 @@ export const createOrder = (chat,user,adress, fio, phone, type, mark, timeInUse,
             })
             alert('Заказа на ремонт успешно отправлен')
             //console.log(response.data)
+            if (role!='admin')
             dispatch(sendMessage(chat,"",response.data.order._id,user))
             console.log(response.data.order._id)
         } catch (e) {
@@ -33,8 +32,7 @@ export const createOrder = (chat,user,adress, fio, phone, type, mark, timeInUse,
 export const getOrder = (orderId,setMainImg, setAdress, setFio, setPhone, setType, setMark, setTimeInUse, setComment, setTime, setImgs, setUrgency) => {
     return async dispatch => {
         try {
-            dispatch(setLOAD(false))
-            const response = await axios.post(`http://178.141.253.120:3001/api/order/getOrder`, {
+            const response = await axios.post(`https://master43.ru:8443/api/order/getOrder`, {
                 orderId
             })
             console.log(response.data)
@@ -51,7 +49,6 @@ export const getOrder = (orderId,setMainImg, setAdress, setFio, setPhone, setTyp
                     setUrgency(response.data.order.urgency)
 
             console.log(true)
-            setTimeout(dispatch(setLOAD(true)))
         } catch (e) {
             alert(e)
         }
@@ -62,12 +59,11 @@ export const deleteOrder = (UID) => {
         try {
             console.log('-------------------------------------')
             console.log(UID)
-            const response = await axios.post(`http://178.141.253.120:3001/api/prod/deleteProduct`, {
+            const response = await axios.post(`https://master43.ru:8443/api/prod/deleteProduct`, {
                 UID
             })
             console.log(response.data.product._id)
             if (response.data.product)
-                dispatch(delProducts(response.data.product._id))
             console.log(response.data.product)
         } catch (e) {
             alert(e.response.data.message)
@@ -76,7 +72,7 @@ export const deleteOrder = (UID) => {
 }
 export const redactOrder = async (id,adress, fio, phone, type, mark, timeInUse, comment, urgency, time, imgs) => {
     try {
-        const response = await axios.post(`http://178.141.253.120:3001/api/order/redactOrder`, {
+        const response = await axios.post(`https://master43.ru:8443/api/order/redactOrder`, {
             id,
             adress,
             fio,
@@ -102,7 +98,7 @@ export function uploadFile(file, UID) {
             formData.append('file', file)
             formData.append('UID', UID)
 
-            const response = await axios.post(`http://178.141.253.120:3001/api/prod/upload`, formData, {
+            const response = await axios.post(`https://master43.ru:8443/api/prod/upload`, formData, {
                 headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
             });
             //dispatch(addFile(response.data))
@@ -111,19 +107,22 @@ export function uploadFile(file, UID) {
         }
     }
 }
-export function getOrders(currentPage,filters) {
-    return async dispatch => {
-        try {
-            const response = await axios.post(`http://178.141.253.120:3001/api/prod/getProducts`,
-                {currentPage,filters}
-            )
-            console.log(response.data)
-            dispatch(setProducts(response.data.products))
-            dispatch(setPageCount(response.data.pagination.pageCount))
-            console.log(true)
-            setLOAD(true)
-        } catch (e) {
-            alert(e)
-        }
+export async function getOrders(currentPage,setCurrenPage,setFetching,products,setProducts,setCountPage,pageCount,revers) {
+    try {
+        let url=`https://master43.ru:8443/api/order/getOrders?currentPage=${currentPage+1}&revers=${revers}`
+
+        const response = await axios.get(url).finally(()=>setFetching(false))
+        console.log(response.data)
+        console.log(response.data)
+        setProducts([...products,...response.data.products])
+        setCountPage(pageCount=>response.data.pagination.pageCount)
+        setCurrenPage(currentPage=>currentPage+1)
+        console.log([...products,...response.data.products])
+        return url
+        //dispatch(setProducts(response.data.products))
+        //dispatch(setPageCount(response.data.pagination.pageCount))
+
+    } catch (e) {
+        //alert(e)
     }
 }

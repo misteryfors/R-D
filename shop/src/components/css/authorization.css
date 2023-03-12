@@ -1,7 +1,7 @@
 .authorization{
     display: flex;
     flex-direction: column;
-    width: 500px;
+    width: 60%;
     align-items: center;
     background-color: white;
     border-radius: 20px;
