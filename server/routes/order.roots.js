@@ -53,22 +53,26 @@ router.post('/redactOrder',
             console.log(e)
         }
     })
-const ItemsPerPage=5
-router.post('/getOrders',
+
+const ItemsPerPage=12
+router.get('/getOrders',
     async (req, res) => {
-        const page=req.body.currentPage || 1
+        const page=req.query.currentPage || 1
         console.log('-------------------------------------------------')
-        console.log(req.body.filters)
-        const minPrice=req.body.filters.minPrice || 0
-        const maxPrice=req.body.filters.maxPrice || 99999999999
-        const priceFilter={$gte:minPrice,$lte:maxPrice}
-        console.log(minPrice,maxPrice)
-        const query={ $and: [{price:priceFilter,name:{$regex:req.body.filters.name,$options:"$i"},type:{$regex:req.body.filters.type,$options:"$i"},mark:{$regex:req.body.filters.mark,$options:"$i"}},{$or:[{name:{$regex:req.body.filters.all,$options:"$i"}},{type:{$regex:req.body.filters.all,$options:"$i"}},{mark:{$regex:req.body.filters.all,$options:"$i"}}]}]}
+        console.log(req.query)
         try {
-            const skip =(page-1) * ItemsPerPage
-            const products = await Product.find(query).limit(ItemsPerPage).skip(skip)
-            const count = await Product.find(query).count()
+
+            const count = await Order.find().count()
             const pageCount = Math.ceil(count / ItemsPerPage)
+
+            let skip;
+            console.log(pageCount,page)
+            if(req.query.revers==='true')
+            {skip =(pageCount-page) * ItemsPerPage}
+            else
+            {skip =(page-1) * ItemsPerPage}
+            let products = await Order.find().limit(ItemsPerPage).skip(skip)
+
             return res.json({pagination:{count,pageCount},products})
         } catch (e) {
             console.log(e)

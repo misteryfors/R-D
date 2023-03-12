@@ -25,13 +25,8 @@ router.post('/createProduct',
                 return res.status(400).json({message:'Uncorrect request', errors})
             }
             //console.log(req.body)
-            const {name, type, mark, price, shortDescription, description, images} =req.body
-            const newProd = await Product.findOne({name})
-            if (newProd)
-            {
-                return res.status(400).json({message: 'Product with name '+name+' already exist'})
-            }
-            const product = new Product({name, type, mark, price, shortDescription, description, images})
+            const {name, type, mark, price, shortDescription, description, images, privateComment} =req.body
+            const product = new Product({name, type, mark, price, shortDescription, description, images, privateComment})
             await product.save()
             await fileService.createDir("products/"+product.id)
 
@@ -56,7 +51,7 @@ router.post('/redactProduct',
             }
             console.log(req.body.imgs)
             console.log(req.body)
-            const newProd = await Product.updateOne({_id: req.body.UID},{$set:{name:req.body.name, type:req.body.type, mark:req.body.mark, price:req.body.price, shortDescription:req.body.shortDescription, description:req.body.description, imgs:req.body.imgs}})
+            const newProd = await Product.updateOne({_id: req.body.UID},{$set:{name:req.body.name, type:req.body.type, mark:req.body.mark, price:req.body.price, shortDescription:req.body.shortDescription, description:req.body.description, imgs:req.body.imgs, privateComment:req.body.privateComment}})
             console.log(newProd)
             return res.json({message:"Product was redacted"})
         }catch (e){
@@ -64,32 +59,48 @@ router.post('/redactProduct',
         }
     })
 const ItemsPerPage=12
-router.post('/getProducts',
+router.get('/getProducts',
     async (req, res) => {
-        const page=req.body.currentPage || 1
+        const page=req.query.currentPage || 1
         console.log('-------------------------------------------------')
-        console.log(req.body.filters)
-        const minPrice=req.body.filters.minPrice || 0
-        const maxPrice=req.body.filters.maxPrice || 99999999999
+        console.log(req.query)
+        const user = req.body.user ? await User.findOne({_id: jwt.decode(req.body.user).id}):''
+        const minPrice=req.query.minPrice || 0.
+        const maxPrice=req.query.maxPrice || 99999999999
         const priceFilter={$gte:minPrice,$lte:maxPrice}
-        console.log(minPrice,maxPrice)
-        const query={ $and: [{price:priceFilter,name:{$regex:req.body.filters.name,$options:"$i"},type:{$regex:req.body.filters.type,$options:"$i"},mark:{$regex:req.body.filters.mark,$options:"$i"}},{$or:[{name:{$regex:req.body.filters.all,$options:"$i"}},{type:{$regex:req.body.filters.all,$options:"$i"}},{mark:{$regex:req.body.filters.all,$options:"$i"}}]}]}
+        console.log(req.query.revers)
+        const query={ $and: [{price:priceFilter,name:{$regex:req.query.name,$options:"$i"},type:{$regex:req.query.type,$options:"$i"},mark:{$regex:req.query.mark,$options:"$i"}},{$or:[{name:{$regex:req.query.all,$options:"$i"}},{type:{$regex:req.query.all,$options:"$i"}},{mark:{$regex:req.query.all,$options:"$i"}}]}]}
         try {
-                const skip =(page-1) * ItemsPerPage
-                const products = await Product.find(query).limit(ItemsPerPage).skip(skip)
-                const count = await Product.find(query).count()
-                const pageCount = Math.ceil(count / ItemsPerPage)
+
+            const count = await Product.find(query).count()
+            const pageCount = Math.ceil(count / ItemsPerPage)
+
+            let skip;
+            console.log(pageCount,page,count)
+            if(req.query.revers==='true')
+            {
+                skip =((pageCount-page) * ItemsPerPage)-(ItemsPerPage-(count-((pageCount-1) * ItemsPerPage)))
+            }
+            else
+            {skip =(page-1) * ItemsPerPage}
+            console.log(skip)
+            console.log((pageCount-page) * ItemsPerPage)
+            console.log(ItemsPerPage+skip)
+            let products
+            if (user.role=='admin')
+            products = await Product.find(query).skip(skip>=0?skip:0).limit(skip>=0?ItemsPerPage:ItemsPerPage+skip)
+            else
+                products= await Product.find(query, { privateComment: 0 }).skip(skip>=0?skip:0).limit(skip>=0?ItemsPerPage:ItemsPerPage+skip)
             return res.json({pagination:{count,pageCount},products})
         } catch (e) {
             console.log(e)
             return res.status(500).json({message: "Can not get files"})
         }
     })
-router.post('/getProduct',
+router.get('/getProduct',
     async (req, res) => {
         try {
-            console.log(req.body.UID);
-            const product = await Product.findOne({_id:req.body.UID})
+            const product = await Product.findOne({_id:req.query.id})
             return res.json({product})
         } catch (e) {
             console.log(e)
